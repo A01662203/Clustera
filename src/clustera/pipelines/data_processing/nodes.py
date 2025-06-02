@@ -52,7 +52,7 @@ def limpieza_basica(df: pd.DataFrame):
         if 'fec' in col.lower():
             df[col] = pd.to_datetime(df[col], errors='coerce')
 
-    df['hay_menores'] = (df['h_num_men'] > 0).astype(int)
+    df['hay_menores'] = (df['h_num_men'] > 0).astype(bool)
     df.drop(columns=['h_num_men'], inplace=True, errors='ignore')
 
     df['dif_dias'] = (df['h_fec_sda_ok'] - df['h_fec_lld_ok']).dt.days
