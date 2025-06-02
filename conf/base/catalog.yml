@@ -1,0 +1,21 @@
+# Entradas (en 01_raw)
+iar_Reservaciones:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/iar_Reservaciones.csv
+
+iar_Agencias:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/iar_Agencias.csv
+
+iar_Tipos_Habitaciones:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/iar_Tipos_Habitaciones.csv
+
+iar_paquetes:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/iar_paquetes.csv
+
+# Salida (en 02_intermediate)
+reservaciones_finales:
+  type: pandas.CSVDataset
+  filepath: data/02_intermediate/reservaciones_finales.csv
