@@ -137,18 +137,5 @@ def crear_categorias_y_separar(df: pd.DataFrame):
     ]
     df = df[orden_columnas]
 
-    # Ajustar tipos finales
-    for col in ['h_num_noc_cat', 'h_tot_hab_cat', 'h_num_adu_cat',
-                 'Tipo_Habitacion_Nombre', 'Tipo_Habitacion_Camas', 'Tipo_Habitacion_Detalles',
-                 'Estado_cve', 'Clasificacion']:
-        df[col] = df[col].astype('category')
-
-    df['hay_menores'] = df['hay_menores'].astype(bool)
-    df['Fecha_hoy'] = pd.to_datetime(df['Fecha_hoy'], errors='coerce')
-    df['h_fec_lld_ok'] = pd.to_datetime(df['h_fec_lld_ok'], errors='coerce')
-    df['h_fec_sda_ok'] = pd.to_datetime(df['h_fec_sda_ok'], errors='coerce')
-
     logger.info("Proceso de limpieza y transformación completado. Registros finales: %d", len(df))
-    # Regresar tipo de datos del DataFrame al logger
-    logger.info("Tipos de datos del DataFrame:\n%s", df.dtypes)
     return df
