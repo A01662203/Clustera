@@ -6,7 +6,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             func=analisis_tda_completo,
             inputs=["reservaciones_finales", "params:parameters_tda"],
-            outputs="tda_analysis_plot_hoy",
-            name="tda_analysis_node_hoy",
+            outputs="tda_analysis_plot_lleg",
+            name="tda_analysis_node_lleg",
         ),
     ])
