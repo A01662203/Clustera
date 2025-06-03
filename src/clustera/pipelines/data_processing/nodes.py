@@ -75,13 +75,32 @@ def crear_categorias_y_separar(df: pd.DataFrame):
         df['h_num_noc'], bins=[0, 2, 4, 6, 8, float('inf')],
         labels=['0-2', '2-4', '4-6', '6-8', '+8'], right=False
     )
-    df.drop(columns=['h_num_noc'], inplace=True, errors='ignore')
+    # df.drop(columns=['h_num_noc'], inplace=True, errors='ignore')
 
-    df['h_tot_hab_cat'] = df['h_tot_hab'].apply(lambda x: '1' if x == 1 else '+1')
-    df.drop(columns=['h_tot_hab'], inplace=True, errors='ignore')
+    # Conversión a numérico (por si vienen de CSV)
+    df['h_tot_hab'] = pd.to_numeric(df['h_tot_hab'], errors='coerce')
+    df['h_num_adu'] = pd.to_numeric(df['h_num_adu'], errors='coerce')
 
-    df['h_num_adu_cat'] = df['h_num_adu'].apply(lambda x: str(x) if x <= 5 else '+5')
-    df.drop(columns=['h_num_adu'], inplace=True, errors='ignore')
+    # Categorización usando pd.cut
+    df['h_tot_hab_cat'] = pd.cut(
+        df['h_tot_hab'],
+        bins=[0, 1, float('inf')],
+        labels=['1', '+1'],
+        right=True
+    )
+
+    df['h_num_adu_cat'] = pd.cut(
+        df['h_num_adu'],
+        bins=[0, 1, 2, 3, 4, 5, float('inf')],
+        labels=['1', '2', '3', '4', '5', '+5'],
+        right=True
+    )
+
+    # Elimina las columnas originales
+    df.drop(columns=['h_tot_hab', 'h_num_adu'], inplace=True, errors='ignore')
+
+
+    # df.drop(columns=['h_num_adu'], inplace=True, errors='ignore')
 
     def separar_componentes(valor):
         if pd.isna(valor):
@@ -132,7 +151,7 @@ def crear_categorias_y_separar(df: pd.DataFrame):
 
     orden_columnas = [
         'ID_Reserva', 'Fecha_hoy', 'h_fec_lld_ok', 'h_fec_sda_ok', 'Estado_cve', 'h_tfa_total',
-        'Tipo_Habitacion_Nombre', 'Tipo_Habitacion_Camas', 'Tipo_Habitacion_Detalles', 'Clasificacion',
+        'Tipo_Habitacion_Nombre', 'Tipo_Habitacion_Camas', 'Tipo_Habitacion_Detalles', 'Clasificacion', 'h_num_noc',
         'h_num_noc_cat', 'h_tot_hab_cat', 'h_num_adu_cat', 'hay_menores'
     ]
     df = df[orden_columnas]
