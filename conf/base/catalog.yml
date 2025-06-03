@@ -19,3 +19,8 @@ iar_paquetes:
 reservaciones_finales:
   type: pandas.CSVDataset
   filepath: data/02_intermediate/reservaciones_finales.csv
+
+# # Salida (en 03_primary)
+# tabla_resumen_anticipacion:
+#   type: pandas.CSVDataset
+#   filepath: data/03_primary/tabla_resumen_anticipacion.csv
