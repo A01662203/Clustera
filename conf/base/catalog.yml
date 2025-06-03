@@ -20,18 +20,24 @@ reservaciones_finales:
   type: pandas.CSVDataset
   filepath: data/02_intermediate/reservaciones_finales.csv
 
-# Salida TDA
-tda_analysis_plot:
-  type: kedro_datasets.matplotlib.MatplotlibWriter
-  filepath: data/08_reporting/tda_anomalies_analysis.png
-  save_args:
-    dpi: 300
-
-
-
 # Salida para clustering
 clustered_reservaciones_segmentadas:
   type: pandas.CSVDataset
   filepath: data/05_model_input/clustered_reservaciones_segmentadas.csv
   save_args:
     index: False
+
+# Salida TDA hoy
+tda_analysis_plot_hoy:
+  type: kedro_datasets.matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/tda_anomalies_analysis_hoy.png
+  save_args:
+    dpi: 300
+
+# Salida TDA lleg
+tda_analysis_plot_lleg:
+  type: kedro_datasets.matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/tda_anomalies_analysis_lleg.png
+  save_args:
+    dpi: 300
+
