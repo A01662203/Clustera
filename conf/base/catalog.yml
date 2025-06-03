@@ -27,11 +27,15 @@ tda_analysis_plot:
   save_args:
     dpi: 300
 
-
-
 # Salida para clustering
 clustered_reservaciones_segmentadas:
   type: pandas.CSVDataset
   filepath: data/05_model_input/clustered_reservaciones_segmentadas.csv
+  save_args:
+    index: False
+
+clustered_reservaciones_segmentadas_v2:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/clustered_reservaciones_segmentadas_v2.csv
   save_args:
     index: False
