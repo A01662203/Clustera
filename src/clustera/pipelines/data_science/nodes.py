@@ -1,57 +1,52 @@
-import logging
-
 import pandas as pd
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import max_error, mean_absolute_error, r2_score
-from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.cluster import KMeans
+from sklearn.pipeline import Pipeline
 
+def entrenar_kmeans(df: pd.DataFrame) -> pd.DataFrame:
+    # 1. Forzar los tipos de datos
+    dtype_map = {
+        "h_num_adu_cat": "object",
+        "hay_menores": "bool",
+        "h_num_noc_cat": "object",
+        "Estado_cve": "object",
+        "Tipo_Habitacion_Nombre": "object",
+        "Tipo_Habitacion_Detalles": "object"
+    }
 
-def split_data(data: pd.DataFrame, parameters: dict) -> tuple:
-    """Splits data into features and targets training and test sets.
+    df_temp = df.copy()
+    for col, dtype in dtype_map.items():
+        if col in df_temp.columns:
+            try:
+                if dtype == "bool":
+                    df_temp[col] = df_temp[col].astype(bool)
+                else:
+                    df_temp[col] = df_temp[col].astype(dtype)
+            except Exception as e:
+                print(f"Error al convertir {col} a {dtype}: {e}")
 
-    Args:
-        data: Data containing features and target.
-        parameters: Parameters defined in parameters/data_science.yml.
-    Returns:
-        Split data.
-    """
-    X = data[parameters["features"]]
-    y = data["price"]
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=parameters["test_size"], random_state=parameters["random_state"]
-    )
-    return X_train, X_test, y_train, y_test
+    # 2. Seleccionar columnas
+    num_cols = []  # Coloca aquí tus columnas numéricas si tienes
+    cat_cols = ["h_num_adu_cat", "hay_menores", "h_num_noc_cat", "Estado_cve", "Tipo_Habitacion_Nombre", "Tipo_Habitacion_Detalles"]
 
+    # 3. Preprocesador
+    preprocessor = ColumnTransformer([
+        ("num", StandardScaler(), num_cols),
+        ("cat", OneHotEncoder(handle_unknown="ignore", sparse_output=False), cat_cols)
+    ])
 
-def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> LinearRegression:
-    """Trains the linear regression model.
+    # 4. Pipeline con KMeans (k=5 como ejemplo)
+    pipeline = Pipeline(steps=[
+        ("preprocessor", preprocessor),
+        ("cluster", KMeans(n_clusters=5, random_state=42))
+    ])
 
-    Args:
-        X_train: Training data of independent features.
-        y_train: Training data for price.
+    # 5. Entrenamiento y predicción
+    X = df_temp[num_cols + cat_cols]
+    cluster_labels = pipeline.fit_predict(X)
 
-    Returns:
-        Trained model.
-    """
-    regressor = LinearRegression()
-    regressor.fit(X_train, y_train)
-    return regressor
+    # 6. Añadir la etiqueta al DataFrame original
+    df_temp["cluster"] = cluster_labels
 
-
-def evaluate_model(
-    regressor: LinearRegression, X_test: pd.DataFrame, y_test: pd.Series
-) -> dict[str, float]:
-    """Calculates and logs the coefficient of determination.
-
-    Args:
-        regressor: Trained model.
-        X_test: Testing data of independent features.
-        y_test: Testing data for price.
-    """
-    y_pred = regressor.predict(X_test)
-    score = r2_score(y_test, y_pred)
-    mae = mean_absolute_error(y_test, y_pred)
-    me = max_error(y_test, y_pred)
-    logger = logging.getLogger(__name__)
-    logger.info("Model has a coefficient R^2 of %.3f on test data.", score)
-    return {"r2_score": score, "mae": mae, "max_error": me}
+    return df_temp

@@ -19,3 +19,10 @@ iar_paquetes:
 reservaciones_finales:
   type: pandas.CSVDataset
   filepath: data/02_intermediate/reservaciones_finales.csv
+
+# Salida para clustering
+clustered_reservaciones_segmentadas:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/clustered_reservaciones_segmentadas.csv
+  save_args:
+    index: False
