@@ -14,8 +14,10 @@ dependencies = [
     "kedro[jupyter]~=0.19.13",
     "kedro-datasets[pandas-csvdataset, pandas-exceldataset, pandas-parquetdataset, plotly-plotlydataset, plotly-jsondataset, matplotlib-matplotlibwriter]>=3.0",
     "kedro-viz>=6.7.0",
-    "scikit-learn~=1.5.1",
+    "scikit-learn~=1.5.1", 
     "seaborn~=0.12.1",
+    "matplotlib>=3.9.4",
+    "giotto-tda>=0.6.0",,
     "tqdm>=4.67.1",
 ]
 
