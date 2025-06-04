@@ -34,21 +34,6 @@ clustered_reservaciones_segmentadas_v2:
   save_args:
     index: False
 
-
-# Salida TDA hoy
-tda_analysis_plot_hoy:
-  type: matplotlib.MatplotlibWriter
-  filepath: data/08_reporting/tda_anomalies_analysis_hoy.png
-  save_args:
-    dpi: 300
-
-# Salida TDA lleg
-tda_analysis_plot_lleg:
-  type: matplotlib.MatplotlibWriter
-  filepath: data/08_reporting/tda_anomalies_analysis_lleg.png
-  save_args:
-    dpi: 300
-
 nixtla_plot_path_hoy:
   type: matplotlib.MatplotlibWriter
   filepath: data/08_reporting/TimeGPT_anomalies_hoy.png

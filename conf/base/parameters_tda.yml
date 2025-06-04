@@ -1,7 +1,0 @@
-parameters_tda:
-  time_delay: 3
-  dimension: 5
-  stride: 1
-  window_size: 20
-  homology_dimensions: [0, 1, 2]
-  figsize: [20, 15]
