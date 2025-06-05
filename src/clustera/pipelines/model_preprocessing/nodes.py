@@ -7,7 +7,7 @@ def preprocess_data(raw_data: pd.DataFrame, params: dict) -> dict:
 
     # Convertir fechas
     df["Fecha_hoy"] = pd.to_datetime(df["Fecha_hoy"])
-    df["fecha_llegada"] = pd.to_datetime(df["fecha_llegada"])
+    df["Fecha_llegada"] = pd.to_datetime(df["Fecha_llegada"])
     
     # Cálculos temporales
     df["mes_llegada_sin"] = np.sin(2 * np.pi * (df["mes_llegada"] - 1) / 12)
@@ -17,15 +17,18 @@ def preprocess_data(raw_data: pd.DataFrame, params: dict) -> dict:
 
     # Fin de semana (booleano)
     df["is_weekend_reserva"] = df["Fecha_hoy"].dt.weekday >= 5
-    df["is_weekend_llegada"] = df["fecha_llegada"].dt.weekday >= 5
+    df["is_weekend_llegada"] = df["Fecha_llegada"].dt.weekday >= 5
 
     # Día de la semana
     df["dow_reserva"] = df["Fecha_hoy"].dt.weekday
-    df["dow_llegada"] = df["fecha_llegada"].dt.weekday
+    df["dow_llegada"] = df["Fecha_llegada"].dt.weekday
 
     # Lead time en días
-    df["dias_anticipacion"] = (df["fecha_llegada"] - df["Fecha_hoy"]).dt.days
+    df["dias_anticipacion"] = (df["Fecha_llegada"] - df["Fecha_hoy"]).dt.days
 
+    # Drop rows where 'Tipo_Habitacion_Nombre' is HANDICAP, HONEY and SUITE PRES
+    df = df[~df["Tipo_Habitacion_Nombre"].isin(["HANDICAP", "HONEY", "SUITE PRES"])]
+    
     # Selección de features finales
     columns_to_keep = [
         "h_num_adu_cat",
@@ -41,7 +44,7 @@ def preprocess_data(raw_data: pd.DataFrame, params: dict) -> dict:
         "mes_rsv_cos",
         "is_weekend_reserva",
         "is_weekend_llegada",
-        "dias_anticipacion"
+        "dias_anticipacion",
         "dow_reserva",
         "dow_llegada"
     ]

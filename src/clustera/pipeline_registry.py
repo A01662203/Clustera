@@ -16,7 +16,13 @@ def register_pipelines() -> dict[str, Pipeline]:
     return {
         # Pipeline por defecto: aquí decides si incluyes uno o más pipelines concatenados
         "__default__": data_processing_pipeline.create_pipeline()
-                       + anticipation_table_pipeline.create_pipeline(),
+                       + anticipation_table_pipeline.create_pipeline()
+                       + data_science_pipeline.create_pipeline()
+                       + Anom_hoy_pipeline.create_pipeline()
+                       + Anom_lleg_pipeline.create_pipeline()
+                       + model_preprocessing_pipeline.create_pipeline()
+                       + train_rf_pipeline.create_pipeline()
+                       + train_xgb_pipeline.create_pipeline(),
         
         # Si necesitas agrupar pipelines en uno “data_science”
         "data_science": (
@@ -51,6 +57,4 @@ def register_pipelines() -> dict[str, Pipeline]:
 
         # Pipeline de entrenamiento conjunto
         "train_both": model_preprocessing_pipeline.create_pipeline() + train_rf_pipeline.create_pipeline() + train_xgb_pipeline.create_pipeline(),
-
-
     }
