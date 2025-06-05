@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/373516080769578290/327c927505d64ae7aeca49b5ff08aa83/artifacts
+end_time: 1749075818222
+entry_point_name: ''
+experiment_id: '373516080769578290'
+lifecycle_stage: active
+run_id: 327c927505d64ae7aeca49b5ff08aa83
+run_name: data_science
+run_uuid: 327c927505d64ae7aeca49b5ff08aa83
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749075781317
+status: 3
+tags: []
+user_id: aesca

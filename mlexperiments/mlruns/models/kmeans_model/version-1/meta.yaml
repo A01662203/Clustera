@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1749075815570
+current_stage: None
+description: ''
+last_updated_timestamp: 1749075815570
+name: kmeans_model
+run_id: 327c927505d64ae7aeca49b5ff08aa83
+run_link: ''
+source: mlflow-artifacts:/373516080769578290/327c927505d64ae7aeca49b5ff08aa83/artifacts/model
+status: READY
+status_message: null
+storage_location: mlflow-artifacts:/373516080769578290/327c927505d64ae7aeca49b5ff08aa83/artifacts/model
+user_id: null
+version: 1
