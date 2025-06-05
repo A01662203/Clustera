@@ -14,7 +14,6 @@ def calcular_tabla_anticipacion(df: pd.DataFrame) -> pd.DataFrame:
     df["mes_rsv"] = df["Fecha_hoy"].dt.month
     df["num_sem_rsv"] = ((df["Fecha_hoy"].dt.day - 1) // 7) + 1
     df["num_sem_llegada"] = ((df["h_fec_lld_ok"].dt.day - 1) // 7) + 1
-    df["num_noc_rgo"] = df["h_num_noc_cat"]
 
     # Agrupación
     tabla_resumen = df.groupby([
@@ -27,7 +26,7 @@ def calcular_tabla_anticipacion(df: pd.DataFrame) -> pd.DataFrame:
         "mes_rsv",
         "num_sem_rsv",
         "num_sem_llegada",
-        "num_noc_rgo"
+        "h_num_noc_cat"
     ]).agg(
         lista_ids=("ID_Reserva", list),
         conteo=("h_tfa_total", "count"),
@@ -48,11 +47,13 @@ def calcular_tabla_anticipacion(df: pd.DataFrame) -> pd.DataFrame:
     columnas_principales = [
         "ID_Reserva", "Fecha_hoy", "Estado_cve", "Tipo_Habitacion_Nombre",
         "meses_anticipacion", "año_llegada", "mes_llegada", "num_sem_llegada",
-        "año_rsv", "mes_rsv", "num_sem_rsv", "num_noc_rgo", "conteo",
+        "año_rsv", "mes_rsv", "num_sem_rsv", "h_num_noc_cat", "conteo",
         "max_tfa_total", "min_tfa_total", "avg_tfa_total", "mda_tfa_total",
         "h_num_adu_cat", "hay_menores", "h_num_noc", "h_tfa_total"
     ]
     tabla_expandida = tabla_expandida[columnas_principales]
+
+    tabla_expandida = tabla_expandida.rename(columns={"h_num_rgo": "h_num_noc_cat"})
 
     tabla_expandida.to_csv("data/03_primary/tabla_desglosada_anticipacion.csv", index=False)
     return tabla_expandida
