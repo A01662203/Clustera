@@ -81,3 +81,5 @@ mba_reglas_por_cluster:
   filepath: data/02_intermediate/mba_reglas_por_cluster.parquet
   save_args:
     index: False
+
+

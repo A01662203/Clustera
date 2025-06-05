@@ -13,13 +13,7 @@ def calcular_tabla_anticipacion(df: pd.DataFrame) -> pd.DataFrame:
     df["mes_llegada"] = df["h_fec_lld_ok"].dt.month
     df["año_rsv"] = df["Fecha_hoy"].dt.year
     df["mes_rsv"] = df["Fecha_hoy"].dt.month
-
-    # Ajuste para categorizar noches usando 'h_num_noc_cat'
     df["num_noc_rgo"] = df["h_num_noc_cat"]
-
-    # Función para convertir lista de IDs a JSON string
-    def ids_a_json(ids):
-        return json.dumps(ids, separators=(',', ':'))
 
     # Agrupar
     tabla_resumen = df.groupby([
@@ -32,7 +26,7 @@ def calcular_tabla_anticipacion(df: pd.DataFrame) -> pd.DataFrame:
         "mes_rsv",
         "num_noc_rgo"
     ]).agg(
-        lista_ids=("ID_Reserva", lambda x: ids_a_json(x.tolist())),
+        lista_ids=("ID_Reserva", lambda x: x.tolist()),
         conteo=("h_tfa_total", "count"),
         max_tfa_total=("h_tfa_total", "max"),
         min_tfa_total=("h_tfa_total", "min"),
@@ -40,10 +34,14 @@ def calcular_tabla_anticipacion(df: pd.DataFrame) -> pd.DataFrame:
         mda_tfa_total=("h_tfa_total", lambda x: x.mode().iloc[0] if not x.mode().empty else np.nan)
     ).reset_index()
 
-    # Reordenar columnas para que "lista_ids" y "conteo" queden al principio
-    cols = ['lista_ids', 'conteo'] + [col for col in tabla_resumen.columns if col not in ['lista_ids', 'conteo']]
-    tabla_resumen = tabla_resumen[cols]
+    # Expandir lista_ids
+    tabla_expandida = tabla_resumen.explode("lista_ids").rename(columns={"lista_ids": "ID_Reserva"})
 
-    tabla_resumen.to_csv("data/03_primary/tabla_resumen_anticipacion.csv", index=False)
+    # Reordenar columnas
+    cols = ['ID_Reserva', 'conteo'] + [col for col in tabla_expandida.columns if col not in ['ID_Reserva', 'conteo']]
+    tabla_expandida = tabla_expandida[cols]
 
-    return tabla_resumen
+    tabla_expandida.to_csv("data/03_primary/tabla_desglosada_anticipacion.csv", index=False)
+    return tabla_expandida
+
+
