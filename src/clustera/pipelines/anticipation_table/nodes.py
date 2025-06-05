@@ -26,7 +26,8 @@ def calcular_tabla_anticipacion(df: pd.DataFrame) -> pd.DataFrame:
         "mes_rsv",
         "num_sem_rsv",
         "num_sem_llegada",
-        "h_num_noc_cat"
+        "h_num_noc_cat",
+        "h_fec_lld_ok",
     ]).agg(
         lista_ids=("ID_Reserva", list),
         conteo=("h_tfa_total", "count"),
@@ -75,7 +76,7 @@ def calcular_tabla_anticipacion(df: pd.DataFrame) -> pd.DataFrame:
 
     # Reordenar columnas
     columnas_principales = [
-        "ID_Reserva", "Fecha_hoy", "Estado_cve", "nombre_estado", "Tipo_Habitacion_Nombre",
+        "ID_Reserva", "Fecha_hoy", "h_fec_lld_ok", "Estado_cve", "nombre_estado", "Tipo_Habitacion_Nombre",
         "meses_anticipacion", "año_llegada", "mes_llegada", "num_sem_llegada",
         "año_rsv", "mes_rsv", "num_sem_rsv", "h_num_noc_cat", "conteo",
         "max_tfa_total", "min_tfa_total", "avg_tfa_total", "mda_tfa_total",
@@ -85,6 +86,7 @@ def calcular_tabla_anticipacion(df: pd.DataFrame) -> pd.DataFrame:
 
     # Renombrar si la columna venía mal nombrada (opcional)
     tabla_expandida = tabla_expandida.rename(columns={"h_num_rgo": "h_num_noc_cat"})
+    tabla_expandida = tabla_expandida.rename(columns={"h_fec_lld_ok": "Fecha_llegada"})
 
     # Exportar
     tabla_expandida.to_csv("data/03_primary/tabla_desglosada_anticipacion.csv", index=False)
