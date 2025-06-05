@@ -2,3 +2,30 @@
 min_support: 0.03
 min_confidence: 0.40
 min_lift: 1.2
+
+# ------------------------------------------------------------------------
+# Parámetros globales (comunes a preprocesado)
+# ------------------------------------------------------------------------
+data:
+  train_split: 0.8
+  random_seed: 42
+
+# ------------------------------------------------------------------------
+# Parámetros específicos para Random Forest
+# ------------------------------------------------------------------------
+rf:
+  n_estimators: 200
+  max_depth: 10
+  min_samples_split: 4
+  class_weight: "balanced"
+
+# ------------------------------------------------------------------------
+# Parámetros específicos para XGBoost
+# ------------------------------------------------------------------------
+xgb:
+  n_estimators: 150
+  max_depth: 8
+  learning_rate: 0.1
+  subsample: 0.8
+  colsample_bytree: 0.8
+  scale_pos_weight: 1    # si hubiera clases desbalanceadas
