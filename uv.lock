@@ -462,11 +462,13 @@ dependencies = [
     { name = "kedro-viz" },
     { name = "matplotlib", version = "3.9.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "matplotlib", version = "3.10.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "mlxtend" },
     { name = "nixtla" },
     { name = "notebook" },
     { name = "scikit-learn" },
     { name = "seaborn" },
     { name = "tqdm" },
+    { name = "typing" },
 ]
 
 [package.optional-dependencies]
@@ -500,6 +502,7 @@ requires-dist = [
     { name = "kedro-mlflow", specifier = ">=0.14.4" },
     { name = "kedro-viz", specifier = ">=6.7.0" },
     { name = "matplotlib", specifier = ">=3.9.4" },
+    { name = "mlxtend", specifier = ">=0.23.4" },
     { name = "myst-parser", marker = "extra == 'docs'", specifier = ">=1.0,<2.1" },
     { name = "nbsphinx", marker = "extra == 'docs'", specifier = "==0.8.1" },
     { name = "nixtla", specifier = ">=0.6.6" },
@@ -515,6 +518,7 @@ requires-dist = [
     { name = "sphinx-copybutton", marker = "extra == 'docs'", specifier = "==0.5.2" },
     { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = "==2.0.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
+    { name = "typing", specifier = ">=3.10.0.0" },
 ]
 provides-extras = ["docs", "dev"]
 
@@ -2433,6 +2437,26 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/16/1e/7d29817fa2370f88550e86ae2be4bee5f9efe82169032dc5b1cab642e5b6/mlflow_skinny-2.22.0.tar.gz", hash = "sha256:774b58970038990650486cd934d46b7038fc390682c3bde70b4e5106f6857cce", size = 5889903 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f4/eb/53dd2a5db1040a21da2980c382ebe3a9bda2d8af8365c2d01053c924b150/mlflow_skinny-2.22.0-py3-none-any.whl", hash = "sha256:9efc39454f6cc3433e7d804c3df8dab4fbba1abe504c52c05f00ef1d0696fef5", size = 6268849 },
+]
+
+[[package]]
+name = "mlxtend"
+version = "0.23.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "joblib" },
+    { name = "matplotlib", version = "3.9.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "matplotlib", version = "3.10.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "numpy", version = "2.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "pandas" },
+    { name = "scikit-learn" },
+    { name = "scipy", version = "1.13.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ae/10/6caee09c2375bd5bebb1eec23a6ac3e8e3e3adab4014b8c3033047665583/mlxtend-0.23.4.tar.gz", hash = "sha256:ba8c8427cbe65d462c8487511331cae0cdcf9252d92f8687f0a53d311128770f", size = 1283996 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4c/43/2fc7f76c8891aef148901f1ba3dee65c1cbac00a85ae5ee0dabc2b861256/mlxtend-0.23.4-py3-none-any.whl", hash = "sha256:8675456e2b71841116e5317f6d7aa568848ea2546865eb5eca7192e9b7f395f4", size = 1352350 },
 ]
 
 [[package]]
@@ -4684,6 +4708,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/ef/88/d65ed807393285204ab6e2801e5d11fbbea811adcaa979a2ed3b67a5ef41/types_python_dateutil-2.9.0.20250516.tar.gz", hash = "sha256:13e80d6c9c47df23ad773d54b2826bd52dbbb41be87c3f339381c1700ad21ee5", size = 13943 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c5/3f/b0e8db149896005adc938a1e7f371d6d7e9eca4053a29b108978ed15e0c2/types_python_dateutil-2.9.0.20250516-py3-none-any.whl", hash = "sha256:2b2b3f57f9c6a61fba26a9c0ffb9ea5681c9b83e69cd897c6b5f668d9c0cab93", size = 14356 },
+]
+
+[[package]]
+name = "typing"
+version = "3.10.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b0/1b/835d4431805939d2996f8772aca1d2313a57e8860fec0e48e8e7dfe3a477/typing-3.10.0.0.tar.gz", hash = "sha256:13b4ad211f54ddbf93e5901a9967b1e07720c1d1b78d596ac6a439641aa1b130", size = 78962 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f2/5d/865e17349564eb1772688d8afc5e3081a5964c640d64d1d2880ebaed002d/typing-3.10.0.0-py3-none-any.whl", hash = "sha256:12fbdfbe7d6cca1a42e485229afcb0b0c8259258cfb919b8a5e2a5c953742f89", size = 26320 },
 ]
 
 [[package]]

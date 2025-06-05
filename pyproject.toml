@@ -20,6 +20,8 @@ dependencies = [
     "tqdm>=4.67.1",
     "nixtla>=0.6.6",
     "kedro-mlflow>=0.14.4",
+    "mlxtend>=0.23.4",
+    "typing>=3.10.0.0",
 ]
 
 [project.scripts]

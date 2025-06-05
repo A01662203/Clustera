@@ -1,4 +1,6 @@
-# Entradas (en 01_raw)
+# =====================================
+# Entradas (01_raw)
+# =====================================
 iar_Reservaciones:
   type: pandas.CSVDataset
   filepath: data/01_raw/iar_Reservaciones.csv
@@ -15,13 +17,13 @@ iar_paquetes:
   type: pandas.CSVDataset
   filepath: data/01_raw/iar_paquetes.csv
 
-# Salida (en 02_intermediate)
+# =====================================
+# Salidas intermedias / model input
+# =====================================
 reservaciones_finales:
   type: pandas.CSVDataset
   filepath: data/02_intermediate/reservaciones_finales.csv
 
-
-# Salida para clustering
 clustered_reservaciones_segmentadas:
   type: pandas.CSVDataset
   filepath: data/05_model_input/clustered_reservaciones_segmentadas.csv
@@ -34,6 +36,9 @@ clustered_reservaciones_segmentadas_v2:
   save_args:
     index: False
 
+# =====================================
+# Gráficos / Reportes
+# =====================================
 nixtla_plot_path_hoy:
   type: matplotlib.MatplotlibWriter
   filepath: data/08_reporting/TimeGPT_anomalies_hoy.png
@@ -46,9 +51,33 @@ nixtla_plot_path_lleg:
   save_args:
     dpi: 300
 
+# =====================================
+# Modelos
+# =====================================
 kmeans_model:
   type: kedro_mlflow.io.models.MlflowModelTrackingDataset
   flavor: mlflow.sklearn
   save_args:
     registered_model_name: kmeans_model
 
+# =====================================
+# Nuevos DataSets para MBA
+# =====================================
+
+# Input para el nodo create_itemsets: multicluster output CSV
+reservaciones_con_cluster:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/clustered_reservaciones_segmentadas.csv
+  load_args:
+    index_col: False
+
+# Output intermedio: itemsets en memoria
+reservaciones_itemsets:
+  type: kedro.io.memory_dataset.MemoryDataset
+
+# Output final: reglas de asociación por cluster
+mba_reglas_por_cluster:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/mba_reglas_por_cluster.parquet
+  save_args:
+    index: False

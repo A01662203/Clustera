@@ -1,69 +1,24 @@
 import pandas as pd
-import joblib
+from typing import Any
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.cluster import KMeans
 from sklearn.pipeline import Pipeline
 import mlflow
 
-# Establecer la URI de seguimiento de MLflow
-mlflow.set_tracking_uri("http://127.0.1:5000")
-# Nombre del experimento
-mlflow.set_experiment("kmeans")
 
-# Versión 1: clustering sin guardar artefactos
-# def entrenar_kmeans(df: pd.DataFrame) -> pd.DataFrame:
-#     dtype_map = {
-#         "h_num_adu_cat": "object",
-#         "hay_menores": "bool",
-#         "h_num_noc_cat": "object",
-#         "Estado_cve": "object",
-#         "Tipo_Habitacion_Nombre": "object",
-#         "Tipo_Habitacion_Detalles": "object"
-#     }
-
-#     df_temp = df.copy()
-#     for col, dtype in dtype_map.items():
-#         if col in df_temp.columns:
-#             try:
-#                 if dtype == "bool":
-#                     df_temp[col] = df_temp[col].astype(bool)
-#                 else:
-#                     df_temp[col] = df_temp[col].astype(dtype)
-#             except Exception as e:
-#                 print(f"Error al convertir {col} a {dtype}: {e}")
-
-#     num_cols = []
-#     cat_cols = ["h_num_adu_cat", "hay_menores", "h_num_noc_cat", "Estado_cve",
-#                 "Tipo_Habitacion_Nombre", "Tipo_Habitacion_Detalles"]
-
-#     preprocessor = ColumnTransformer([
-#         ("num", StandardScaler(), num_cols),
-#         ("cat", OneHotEncoder(handle_unknown="ignore", sparse_output=False), cat_cols)
-#     ])
-
-#     pipeline = Pipeline(steps=[
-#         ("preprocessor", preprocessor),
-#         ("cluster", KMeans(n_clusters=5, random_state=42))
-#     ])
-
-#     X = df_temp[num_cols + cat_cols]
-#     cluster_labels = pipeline.fit_predict(X)
-
-#     df_temp["cluster"] = cluster_labels
-
-#     return df_temp
-
-def entrenar_kmeans(df: pd.DataFrame) -> Pipeline:
+def entrenar_kmeans(df: pd.DataFrame) -> Any:
     """
-    Entrena un modelo de clustering KMeans y devuelve el pipeline entrenado.
+    Nodo que entrena un modelo KMeans y lo devuelve. Kedro-MLflow capturará
+    automáticamente el objeto retornado y lo guardará en el dataset 'kmeans_model'.
 
-    Args:
-        df: DataFrame de entrada con las características para clustering.
+    Recibe:
+        df: DataFrame con las columnas necesarias para clustering.
 
-    Returns:
-        Pipeline entrenado con el preprocesador y el modelo KMeans.
+    Retorna:
+        pipeline: sklearn.Pipeline con ColumnTransformer + KMeans entrenado.
     """
+    # Definir mapeo de tipos
     dtype_map = {
         "h_num_adu_cat": "object",
         "hay_menores": "bool",
@@ -73,6 +28,7 @@ def entrenar_kmeans(df: pd.DataFrame) -> Pipeline:
         "Tipo_Habitacion_Detalles": "object"
     }
 
+    # Asegurar tipos correctos
     df_temp = df.copy()
     for col, dtype in dtype_map.items():
         if col in df_temp.columns:
@@ -81,37 +37,55 @@ def entrenar_kmeans(df: pd.DataFrame) -> Pipeline:
                     df_temp[col] = df_temp[col].astype(bool)
                 else:
                     df_temp[col] = df_temp[col].astype(dtype)
-            except Exception as e:
-                print(f"Error al convertir {col} a {dtype}: {e}")
+            except Exception:
+                # Podemos loguear un warning, pero no interrumpir la ejecución
+                print(f"Warning: no se pudo convertir {col} a {dtype}")
 
-    num_cols = []
-    cat_cols = ["h_num_adu_cat", "hay_menores", "h_num_noc_cat", "Estado_cve",
-                 "Tipo_Habitacion_Nombre", "Tipo_Habitacion_Detalles"]
+    # Columnas a usar
+    num_cols = []  # Si en el futuro agregas columnas numéricas, inclúyelas aquí
+    cat_cols = [
+        "h_num_adu_cat",
+        "hay_menores",
+        "h_num_noc_cat",
+        "Estado_cve",
+        "Tipo_Habitacion_Nombre",
+        "Tipo_Habitacion_Detalles"
+    ]
 
+    # Preprocesador: solo OneHotEncoder para las categóricas
     preprocessor = ColumnTransformer([
         ("num", StandardScaler(), num_cols),
         ("cat", OneHotEncoder(handle_unknown="ignore", sparse_output=False), cat_cols)
     ])
-    num_clusters = 5  # Número de clusters
 
+    # Definir número de clusters
+    num_clusters = 5
+
+    # Construir pipeline completo
     pipeline = Pipeline(steps=[
         ("preprocessor", preprocessor),
         ("cluster", KMeans(n_clusters=num_clusters, random_state=42))
     ])
 
+    # Entrenar pipeline
     X = df_temp[num_cols + cat_cols]
     pipeline.fit(X)
 
-    with mlflow.start_run():
-        mlflow.log_param("n_clusters", num_clusters)
-        mlflow.log_metric
+    # Registrar el parámetro en MLflow
+    mlflow.log_param("n_clusters", num_clusters)
 
-    # Devuelve el pipeline directamente, para que lo maneje Kedro-MLflow
+    # Devolver el objeto pipeline: Kedro-MLflow se encargará de guardarlo
     return pipeline
 
 
-# Versión 2: clustering + exportación de artefactos para predicción
 def entrenar_kmeans_v2(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Nodo alternativo que entrena KMeans y, además de devolver el DataFrame con
+    la columna 'cluster', salva los artefactos de preprocesador y modelo en archivos
+    locales (si así lo deseas). No está integrado con Kedro-MLflow para el modelo,
+    pero retorna el DataFrame con la columna 'cluster'.
+    """
+    # Mapeo de tipos (igual que en el nodo anterior)
     dtype_map = {
         "h_num_adu_cat": "object",
         "hay_menores": "bool",
@@ -129,8 +103,8 @@ def entrenar_kmeans_v2(df: pd.DataFrame) -> pd.DataFrame:
                     df_temp[col] = df_temp[col].astype(bool)
                 else:
                     df_temp[col] = df_temp[col].astype(dtype)
-            except Exception as e:
-                print(f"Error al convertir {col} a {dtype}: {e}")
+            except Exception:
+                print(f"Warning: no se pudo convertir {col} a {dtype}")
 
     num_cols = []
     cat_cols = [
@@ -147,17 +121,15 @@ def entrenar_kmeans_v2(df: pd.DataFrame) -> pd.DataFrame:
         ("cat", OneHotEncoder(handle_unknown="ignore", sparse_output=False), cat_cols)
     ])
 
-    pipeline = Pipeline(steps=[
-        ("preprocessor", preprocessor),
-        ("cluster", KMeans(n_clusters=5, random_state=42))
-    ])
+    kmeans = KMeans(n_clusters=5, random_state=42)
 
+    # Entrenar
     X = df_temp[num_cols + cat_cols]
-    cluster_labels = pipeline.fit_predict(X)
-    df_temp["cluster"] = cluster_labels
+    df_temp["cluster"] = kmeans.fit_predict(X)
 
-    # Guardar artefactos en el directorio del modelo
+    # Si quieres exportar localmente:
+    import joblib
     joblib.dump(preprocessor, "data/06_models/kmeans_v2_preprocessor.pkl")
-    joblib.dump(pipeline.named_steps["cluster"], "data/06_models/kmeans_v2_model.pkl")
+    joblib.dump(kmeans, "data/06_models/kmeans_v2_model.pkl")
 
     return df_temp

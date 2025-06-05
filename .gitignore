@@ -162,3 +162,6 @@ venv.bak/
 
 # mlflow local runs
 mlruns/*
+
+# Experimentos de Kedro-MLflow (o donde guardes tus runs)
+mlexperiments/
