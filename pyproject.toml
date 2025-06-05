@@ -19,7 +19,7 @@ dependencies = [
     "matplotlib>=3.9.4",
     "tqdm>=4.67.1",
     "nixtla>=0.6.6",
-    "mlflow>=2.22.0",
+    "kedro-mlflow>=0.14.4",
 ]
 
 [project.scripts]

@@ -28,6 +28,9 @@ data/**
 # ignore file based logs
 *.log
 
+# Ignore anything inside the directory of mlexperiments
+mlexperiments/**
+
 ##########################
 # Common files
 

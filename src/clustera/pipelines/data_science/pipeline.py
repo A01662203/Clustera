@@ -7,7 +7,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             func=entrenar_kmeans,
             inputs="reservaciones_finales",
-            outputs="clustered_reservaciones_segmentadas",
+            outputs="kmeans_model",
             name="entrenar_kmeans_node"
         ),
         # Nodo 2

@@ -46,4 +46,9 @@ nixtla_plot_path_lleg:
   save_args:
     dpi: 300
 
+kmeans_model:
+  type: kedro_mlflow.io.models.MlflowModelTrackingDataset
+  flavor: mlflow.sklearn
+  save_args:
+    registered_model_name: kmeans_model
 
