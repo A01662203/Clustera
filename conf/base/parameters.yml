@@ -1,4 +1,4 @@
 # conf/base/parameters.yml
-min_support: 0.05
+min_support: 0.03
 min_confidence: 0.40
 min_lift: 1.2
