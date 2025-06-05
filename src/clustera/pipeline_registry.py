@@ -6,6 +6,9 @@ from clustera.pipelines.data_science import pipeline as data_science_pipeline
 from clustera.pipelines.anticipation_table import pipeline as anticipation_table_pipeline
 from clustera.pipelines.Anom_hoy import pipeline as Anom_hoy_pipeline
 from clustera.pipelines.Anom_lleg import pipeline as Anom_lleg_pipeline
+from clustera.pipelines.model_preprocessing import pipeline as model_preprocessing_pipeline
+from clustera.pipelines.train_rf import pipeline as train_rf_pipeline
+from clustera.pipelines.train_xgb import pipeline as train_xgb_pipeline
 from clustera.pipelines.MBA import pipeline as MBA_pipeline
 
 
@@ -36,4 +39,18 @@ def register_pipelines() -> dict[str, Pipeline]:
         
         # Pipeline de solo “mba”
         "mba": MBA_pipeline.create_pipeline(),
+
+        # Pipeline de model_preprocessing
+        "models_preprocessing": model_preprocessing_pipeline.create_pipeline(),
+
+        # Pipeline de Random Forest
+        "train_rf": model_preprocessing_pipeline.create_pipeline() + train_rf_pipeline.create_pipeline(),
+
+        # Pipeline de XGBoost
+        "train_xgb": model_preprocessing_pipeline.create_pipeline() + train_xgb_pipeline.create_pipeline(),
+
+        # Pipeline de entrenamiento conjunto
+        "train_both": model_preprocessing_pipeline.create_pipeline() + train_rf_pipeline.create_pipeline() + train_xgb_pipeline.create_pipeline(),
+
+
     }

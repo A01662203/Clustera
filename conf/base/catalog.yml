@@ -54,6 +54,7 @@ nixtla_plot_path_lleg:
 # =====================================
 # Modelos
 # =====================================
+
 kmeans_model:
   type: kedro_mlflow.io.models.MlflowModelTrackingDataset
   flavor: mlflow.sklearn
@@ -79,5 +80,13 @@ reservaciones_itemsets:
 mba_reglas_por_cluster:
   type: pandas.CSVDataset
   filepath: data/02_intermediate/mba_reglas_por_cluster.csv
+  save_args:
+    index: False
+
+# =====================================
+# Dataset para Model Preprocessing
+tabla_desglosada_anticipacion:
+  type: pandas.CSVDataset
+  filepath: data/03_primary/tabla_desglosada_anticipacion.csv
   save_args:
     index: False

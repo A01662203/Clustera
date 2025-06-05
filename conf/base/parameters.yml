@@ -13,19 +13,19 @@ data:
 # ------------------------------------------------------------------------
 # Parámetros específicos para Random Forest
 # ------------------------------------------------------------------------
-rf:
-  n_estimators: 200
-  max_depth: 10
-  min_samples_split: 4
-  class_weight: "balanced"
+rf_grid:
+  n_estimators: [100, 200, 300]
+  max_depth: [5, 10, 15, None]
+  min_samples_split: [2, 4, 6]
+  class_weight: ["balanced"]
 
 # ------------------------------------------------------------------------
 # Parámetros específicos para XGBoost
 # ------------------------------------------------------------------------
-xgb:
-  n_estimators: 150
-  max_depth: 8
-  learning_rate: 0.1
-  subsample: 0.8
-  colsample_bytree: 0.8
-  scale_pos_weight: 1    # si hubiera clases desbalanceadas
+xgb_grid:
+  n_estimators: [100, 200]
+  max_depth: [3, 5, 7]
+  learning_rate: [0.05, 0.1, 0.2]
+  subsample: [0.8, 1.0]
+  colsample_bytree: [0.8, 1.0]
+  scale_pos_weight: [1]  # ajusta si hay desbalance

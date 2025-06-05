@@ -6,7 +6,7 @@ def create_pipeline(**kwargs):
         [
             node(
                 func=preprocess_data,
-                inputs=["reservaciones_raw", "parameters"],
+                inputs=["tabla_desglosada_anticipacion", "parameters"],
                 outputs="preprocessed_data_dict",
                 name="preprocess_data_node",
             )
