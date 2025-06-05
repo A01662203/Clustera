@@ -77,9 +77,7 @@ reservaciones_itemsets:
 
 # Output final: reglas de asociación por cluster
 mba_reglas_por_cluster:
-  type: pandas.ParquetDataset
-  filepath: data/02_intermediate/mba_reglas_por_cluster.parquet
+  type: pandas.CSVDataset
+  filepath: data/02_intermediate/mba_reglas_por_cluster.csv
   save_args:
     index: False
-
-
